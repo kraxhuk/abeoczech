@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tak pojďme po česky! | Čajka (A1-A2)</title>
+
+  <style>
+    /* ================= CSS VARIABLES & DYNAMIC COLORS ================= */
+    :root {
+      --unit-light: #ff7675;
+      --unit-dark: #d63031;
+      --unit-bg: rgba(255, 118, 117, 0.2);
+    }
+
+    /* ================= GLASSMORPHISM & CSS RESET ================= */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+      background-image: 
+        radial-gradient(circle at 15% 50%, rgba(73, 160, 255, 0.2), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(255, 94, 98, 0.2), transparent 25%);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #2c3e50;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .publisher {
+      font-size: 1rem;
+      color: #7f8c8d;
+      font-style: italic;
+      margin-top: 5px;
+    }
+
+    .level-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #0984e3, #6c5ce7);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      margin-top: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      letter-spacing: 1px;
+    }
+
+    /* Glass Container */
+    .glass-container {
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+      width: 100%;
+      max-width: 1250px;
+      display: flex;
+      overflow: hidden;
+      min-height: 75vh;
+    }
+
+    /* Sidebar (Units) */
+    .sidebar {
+      width: 270px;
+      background: rgba(255, 255, 255, 0.3);
+      border-right: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+    }
+
+    .sidebar-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #636e72;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .unit-btn {
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      padding: 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      text-align: left;
+      transition: all 0.3s ease;
+      color: #2c3e50;
+    }
+
+    .unit-btn:hover, .unit-btn.active {
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      transform: translateY(-2px);
+    }
+
+    /* Color coding for Units */
+    .unit-btn[data-unit="unit1"] { border-left: 5px solid #ff7675; }
+    .unit-btn[data-unit="unit2"] { border-left: 5px solid #74b9ff; }
+    .unit-btn[data-unit="unit3"] { border-left: 5px solid #55efc4; }
+    .unit-btn[data-unit="unit4"] { border-left: 5px solid #a29bfe; }
+    .unit-btn[data-unit="unit5"] { border-left: 5px solid #fdcb6e; }
+    .unit-btn[data-unit="unit6"] { border-left: 5px solid #e84393; }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      max-height: 80vh;
+    }
+
+    .topic-nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .topic-btn {
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .topic-btn:hover, .topic-btn.active {
+      background: var(--unit-light);
+      color: white;
+      border-color: var(--unit-light);
+    }
+
+    /* Content Area Styles */
+    .content-area {
+      flex: 1;
+    }
+
+    .topic-header h2 { margin-bottom: 0.5rem; color: #2d3436; font-size: 1.8rem; }
+    .topic-header p { margin-bottom: 1.5rem; color: #636e72; line-height: 1.6; font-size: 1.05rem; }
+
+    .bubble-card {
+      background: rgba(255, 255, 255, 0.65);
+      border-radius: 15px;
+      padding: 1.8rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      border: 1px solid rgba(255,255,255,0.8);
+    }
+
+    .bubble-card h3 { 
+      margin-bottom: 1rem; 
+      color: var(--unit-dark); 
+      transition: color 0.3s;
+      font-size: 1.3rem;
+      border-bottom: 2px solid var(--unit-bg);
+      padding-bottom: 8px;
+    }
+    .bubble-card p, .bubble-card ul { margin-bottom: 1rem; line-height: 1.7; font-size: 1rem; }
+    .bubble-card ul { margin-left: 1.5rem; }
+    .bubble-card li { margin-bottom: 6px; }
+
+    /* Vocabulary Grid */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1rem;
+    }
+
+    .vocab-item {
+      background: rgba(255,255,255,0.85);
+      padding: 1.1rem;
+      border-radius: 12px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      border: 1px solid rgba(255,255,255,0.9);
+    }
+
+    .vocab-cz { font-weight: bold; font-size: 1.15rem; color: #2d3436; }
+    .vocab-uk { font-size: 0.92rem; color: #636e72; margin-top: 6px; }
+    .tag { 
+      position: absolute; top: -8px; right: -8px; 
+      background: #e17055; color: white; 
+      font-size: 0.65rem; padding: 3px 7px; border-radius: 8px; font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+
+    /* Grammar Tables */
+    .grammar-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      background: rgba(255,255,255,0.5);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .grammar-table th, .grammar-table td {
+      border: 1px solid rgba(0,0,0,0.08);
+      padding: 0.85rem;
+      text-align: left;
+    }
+    .grammar-table th { 
+      background: var(--unit-bg); 
+      transition: background-color 0.3s;
+      color: #2d3436;
+      font-weight: bold;
+    }
+
+    /* Finish Button */
+    .finish-btn {
+      display: block;
+      width: 100%;
+      padding: 1.1rem;
+      background: linear-gradient(135deg, var(--unit-light), var(--unit-dark));
+      color: white;
+      text-align: center;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+    .finish-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+
+    /* Quiz Modal */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(5px);
+      display: none; justify-content: center; align-items: center; z-index: 10;
+    }
+    .modal-content {
+      background: white; border-radius: 20px; padding: 2.5rem; width: 90%; max-width: 650px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: center; position: relative;
+    }
+    .close-modal {
+      position: absolute; top: 15px; right: 20px; font-size: 1.8rem; cursor: pointer; color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Tak pojďme po česky!</h1>
+    <p class="publisher">Vydavatelství Čajka</p>
+    <div class="level-badge">COMPREHENSIVE COURSE: LEVEL A1–A2</div>
+  </header>
+
+  <div class="glass-container">
+    <div class="sidebar" id="sidebar"></div>
+
+    <div class="main-content">
+      <div class="topic-nav" id="topic-nav"></div>
+      <div class="content-area" id="content-area">
+        <h2>Оберіть юніт та тему зліва, щоб розпочати вивчення рівня А1–А2.</h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz Modal -->
+  <div class="modal-overlay" id="quiz-modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeQuiz()">×</span>
+      <h2>Підсумковий тест юніту (Test A1-A2)</h2>
+      <p style="margin: 1.2rem 0; line-height: 1.6;">Інтерактивна перевірка засвоєних граматичних структур та лексики поточного рівня. Працюйте зосереджено!</p>
+      <button class="topic-btn" onclick="closeQuiz()" style="background: #2d3436; color: white;">Закрити тест</button>
+    </div>
+  </div>
+
+  <script>
+    // ================= POBLED DATA: A1-A2 EXTENSIVE FULL CONTENT =================
+    const unitsData = {
+      'unit1': {
+        title: 'Lekce 1 (A1)',
+        topics: {
+          'a': {
+            title: '1a. Pozdravy & Abeceda',
+            content: `
+              <div class="topic-header">
+                <h2>1a. Pozdravy, abeceda a výslovnost — Вітання, алфавіт та фонетика</h2>
+                <p>Основи чеської фонетики, правила наголосу (завжди на <strong>першому складі</strong>) та етикетні формули.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>👋 Oficiální a neoficiální pozdravy</h3>
+                <div class="vocab-grid">
+                  <div class="vocab-item"><div class="vocab-cz">Dobrý den</div><div class="vocab-uk">Добрий день / вечір</div><span class="tag">Formální</span></div>
+                  <div class="vocab-item"><div class="vocab-cz">Dobré ráno</div><div class="vocab-uk">Доброго ранку</div><span class="tag">Formální</span></div>
+                  <div class="vocab-item"><div class="vocab-cz">Ahoj / Čau</div><div class="vocab-uk">Привіт / Бувай</div><span class="tag">Neformální</span></div>
+                  <div class="vocab-item"><div class="vocab-cz">Na shledanou</div><div class="vocab-uk">До побачення</div><span class="tag">Formální</span></div>
+                  <div class="vocab-item"><div class="vocab-cz">Na schledanou / Ahoj</div><div class="vocab-uk">Бувай (при зустрічі/прощанні)</div><span class="tag">Neformální</span></div>
+                  <div class="vocab-item"><div class="vocab-cz">Dobrou noc</div><div class="vocab-uk">На добраніч</div><span class="tag">Večer</span></div>
+                </div>
+              </div>
+              <div class="bubble-card">
+                <h3>🔤 Особливості чеської вивчення звуків</h3>
+                <ul>
+                  <li><strong>Ř</strong> — унікальний звук (злиття ж+р), наприклад у слові <em>Dvořák</em> чи <em>řeč</em>.</li>
+                  <li><strong>Č, Š, Ž</strong> — м'які шиплячі (як українські ч, ш, ж).</li>
+                  <li><strong>Ě</strong> — читається як [є] або пом'якшує попередню приголосну (měl [м'ел], běží [б'ежі]).</li>
+                  <li><strong>Ů / Ú</strong> — довге [у] (ů пишеться всередині або в кінці слова, ú — переважно на початку).</li>
+                </ul>
+              </div>
+            `
+          },
+          'b': {
+            title: '1b. Sloveso BÝT',
+            content: `
+              <div class="topic-header">
+                <h2>1b. Kdo jsi a co děláš? — Дієслово BÝT та займенники</h2>
+                <p>Вивчення особистих займенників та базового дієслова буття <strong>být</strong> у ствердженні та запереченні.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>📘 Gramatika: Sloveso BÝT (Спряження)</h3>
+                <table class="grammar-table">
+                  <thead><tr><th>Особа</th><th>Ствердження (+)</th><th>Заперечення (-)</th><th>Приклад використання</th></tr></thead>
+                  <tbody>
+                    <tr><td>Já (Я)</td><td>jsem</td><td>nejsem</td><td>Já jsem unavený / unavená.</td></tr>
+                    <tr><td>Ty (Ти)</td><td>jsi</td><td>nejseš / nejsi</td><td>Ty jsi můj nejlepší přítel.</td></tr>
+                    <tr><td>On / Ona / To (Він / Вона / Воно)</td><td>je</td><td>není</td><td>To je velmi zajímavá kniha.</td></tr>
+                    <tr><td>My (Ми)</td><td>jsme</td><td>nejsme</td><td>My jsme dnes doma.</td></tr>
+                    <tr><td>Vy (Ви)</td><td>jste</td><td>nejste</td><td>Vy jste pan profesor?</td></tr>
+                    <tr><td>Oni / Ony (Вони)</td><td>jsou</td><td>nejsou</td><td>Kde jsou moji kolegové?</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="bubble-card">
+                <h3>💬 Корисні фрази для самопрезентації</h3>
+                <ul>
+                  <li><strong>Odkud jste?</strong> — Звідки ви? (Jsem z Ukrajiny / z Polska).</li>
+                  <li><strong>Kde bydlíte?</strong> — Де ви мешкаєте? (Bydlím v Praze).</li>
+                  <li><strong>Co děláte?</strong> — Чим ви займаєтеся? (Jsem inženýr / studentka).</li>
+                </ul>
+              </div>
+            `
+          },
+          'c': {
+            title: '1c. Jazyky & Státy',
+            content: `
+              <div class="topic-header">
+                <h2>1c. Země, národnosti a jazyky — Країни, національності та мови</h2>
+                <p>Як називати країни чеською мовою, утворювати жіночі форми національностей та говорити про мови.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>🌍 Перелік країн та прислівників мов</h3>
+                <table class="grammar-table">
+                  <thead><tr><th>Країна (Země)</th><th>Людина (Muž / Žena)</th><th>Мова (Jazyk / Jak?)</th></tr></thead>
+                  <tbody>
+                    <tr><td>Česko / Česká republika</td><td>Čech / Češka</td><td>česky</td></tr>
+                    <tr><td>Ukrajina</td><td>Ukrajinec / Ukrajinka</td><td>ukrajinsky</td></tr>
+                    <tr><td>Německo</td><td>Němec / Němka</td><td>německy</td></tr>
+                    <tr><td>Velká Británie</td><td>Angličan / Angličanka</td><td>anglicky</td></tr>
+                    <tr><td>Španělsko</td><td>Španěl / Španělka</td><td>španělsky</td></tr>
+                    <tr><td>Francie</td><td>Francouz / Francouzka</td><td>francouzsky</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            `
+          },
+          'd': {
+            title: '1d. Číslovky 0-100',
+            content: `
+              <div class="topic-header">
+                <h2>1d. Číslovky a věk — Числівники та вік (0–100)</h2>
+                <p>Вивчаємо рахунок, цифри та конструкції для зазначення віку й цін.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>🔢 Základní číslovky (Основні числівники)</h3>
+                <div class="vocab-grid">
+                  <div class="vocab-item"><div class="vocab-cz">0 – 10</div><div class="vocab-uk">nula, jedna, dva, tři, čtyři, pět, šest, sedm, osm, devět, deset</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">11 – 20</div><div class="vocab-uk">jedenáct, dvanáct, třináct, čtrnáct, patnáct, šestnáct, sedmnáct, osmnáct, devatenáct, dvacet</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Десятки</div><div class="vocab-uk">třicet (30), čtyřicet (40), padesát (50), šedesát (60), sedmdesát (70), osmdesát (80), devadesát (90), sto (100)</div></div>
+                </div>
+              </div>
+              <div class="bubble-card">
+                <h3>⏳ Як сказати свій вік?</h3>
+                <p>Використовується дієслово <strong>mít</strong> у формі теперішнього часу + роки (rok / roky / let):</p>
+                <ul>
+                  <li><strong>Je mi 20 let.</strong> — Мені 20 років.</li>
+                  <li><strong>Kolik je ti let?</strong> — Скільки тобі років?</li>
+                  <li><strong>Kolik je vám let?</strong> — Скільки вам років? (офіційно).</li>
+                </ul>
+              </div>
+            `
+          },
+          'e': {
+            title: '1e. Test Lekce 1',
+            content: `
+              <div class="topic-header">
+                <h2>1e. Závěrečné opálení Lekce 1 — Підсумковий тренажер</h2>
+              </div>
+              <div class="bubble-card">
+                <h3>📌 Чек-лист засвоєння рівня Юніту 1:</h3>
+                <ul>
+                  <li>✅ Вільно володію етикетними привітаннями та формами звертання (Ty vs Vy).</li>
+                  <li>✅ Впевнено спрягаю дієслово <em>být</em> у ствердженні та запереченні.</li>
+                  <li>✅ Знаю назви ключових європейських країн, національностей та мов.</li>
+                  <li>✅ Вмію рахувати від 0 до 100 та казати свій вік.</li>
+                </ul>
+              </div>
+              <button class="finish-btn" onclick="openQuiz()">UKONČIT 1. LEKCI (ЗАВЕРШИТИ ЮНІТ)</button>
+            `
+          }
+        }
+      },
+      'unit2': {
+        title: 'Lekce 2 (A1)',
+        topics: {
+          'a': {
+            title: '2a. Město & Doprava',
+            content: `
+              <div class="topic-header">
+                <h2>2a. Město a orientace — Місто, громадський транспорт та орієнтація</h2>
+                <p>Як запитати дорогу, орієнтуватися у вулицях та користуватися міським транспортом.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>🏙️ Městská infrastruktura (Інфраструктура міста)</h3>
+                <div class="vocab-grid">
+                  <div class="vocab-item"><div class="vocab-cz">Náměstí / Ulice</div><div class="vocab-uk">Площа / Вулиця</div><span class="tag">Místo</span></div>
+                  <div class="vocab-item"><div class="vocab-cz">Zastávka / Stanice</div><div class="vocab-uk">Зупинка / Станція метро</div><span class="tag">MHD</span></div>
+                  <div class="vocab-item"><div class="vocab-cz">Lékárna / Nemocnice</div><div class="vocab-uk">Аптека / Лікарня</div><span class="tag">Zdraví</span></div>
+                  <div class="vocab-item"><div class="vocab-cz">Pošta / Banka</div><div class="vocab-uk">Пошта / Банк</div><span class="tag">Služby</span></div>
+                  <div class="vocab-item"><div class="vocab-cz">Kavárna / Restaurace</div><div class="vocab-uk">Кав'ярня / Ресторан</div><span class="tag">Jídlo</span></div>
+                  <div class="vocab-item"><div class="vocab-cz">Supermarket / Obchod</div><div class="vocab-uk">Супермаркет / Магазин</div><span class="tag">Nákupy</span></div>
+                </div>
+              </div>
+              <div class="bubble-card">
+                <h3>🧭 Питання про дорогу та відповіді</h3>
+                <ul>
+                  <li><strong>Kde je prosím nejbližší bankomat?</strong> — Де, будь ласка, найближчий банкомат?</li>
+                  <li><strong>Jděte pořád rovně, potom zahněte doprava.</strong> — Йдіть прямо, потім поверніть направо.</li>
+                  <li><strong>Je to daleko?</strong> — Це далеко? (Ne, je to blízko).</li>
+                </ul>
+              </div>
+            `
+          },
+          'b': {
+            title: '2b. Čas & Hodiny',
+            content: `
+              <div class="topic-header">
+                <h2>2b. Kolik je hodin? — Котра година та розклад дня</h2>
+                <p>Вивчення офіційного та розмовного вираження часу, днів тижня та частин доби.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>⏰ Výjádření času (Вираження часу)</h3>
+                <div class="vocab-grid">
+                  <div class="vocab-item"><div class="vocab-cz">Kolik je hodin?</div><div class="vocab-uk">Котра година?</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Je jedna hodina.</div><div class="vocab-uk">Зараз перша година.</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Jsou dvě / tři / čtyři hodine.</div><div class="vocab-uk">Зараз 2 / 3 / 4 години.</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Je pět hodin.</div><div class="vocab-uk">Зараз 5 годин.</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">V kolik hodin?</div><div class="vocab-uk">О котрій годині?</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">V půl osmé</div><div class="vocab-uk">О пів на восьму (7:30)</div></div>
+                </div>
+              </div>
+              <div class="bubble-card">
+                <h3>📅 Dny v týdnu (Дні тижня)</h3>
+                <p>Pondělí (понеділок), Úterý (вівторок), Středa (середа), Čtvrtek (четвер), Pátek (п'ятниця), Sobota (субота), Neděle (неділя).</p>
+              </div>
+            `
+          },
+          'c': {
+            title: '2c. Restaurace & Jídlo',
+            content: `
+              <div class="topic-header">
+                <h2>2c. V restauraci — Замовлення їжі, меню та розрахунок</h2>
+                <p>Покроковий комунікативний практикум для відвідування чеських ресторанів та пабів (hospoda).</p>
+              </div>
+              <div class="bubble-card">
+                <h3>🍲 Jídelní lístek a nápoje</h3>
+                <div class="vocab-grid">
+                  <div class="vocab-item"><div class="vocab-cz">Polévka / Hlavní chod</div><div class="vocab-uk">Суп / Головна страва</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Svíčková / Guláš</div><div class="vocab-uk">Свічкова / Гуляш (традиційні страви)</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Čepované pivo / Víno</div><div class="vocab-uk">Розливне пиво / Вино</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Účet, prosím!</div><div class="vocab-uk">Рахунок, будь ласка!</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Platím kartou / hotově</div><div class="vocab-uk">Оплачую карткою / готівкою</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Dobrou chuť!</div><div class="vocab-uk">Смачного!</div></div>
+                </div>
+              </div>
+              <div class="bubble-card">
+                <h3>💬 Корисні діалоги офіціанта</h3>
+                <ul>
+                  <li><strong>Co si dáte k pití?</strong> — Що візьмете пити? (Dám si malé světlé pivo).</li>
+                  <li><strong>Bude to všechno?</strong> — Це все? (Ano, děkuji, to stačí).</li>
+                </ul>
+              </div>
+            `
+          },
+          'd': {
+            title: '2d. Akusativ (4. pád)',
+            content: `
+              <div class="topic-header">
+                <h2>2d. Gramatika: 4. pád (Akusativ) — Знахідний відмінок</h2>
+                <p>Ключовий відмінок для прямого об'єкта в чеській мові (кого? що?).</p>
+              </div>
+              <div class="bubble-card">
+                <h3>📘 Як змінюються істоти та неістоти в Akusativu</h3>
+                <table class="grammar-table">
+                  <thead><tr><th>Рід / Істота</th><th>Називний (1. pád)</th><th>Знахідний (4. pád)</th><th>Приклад у реченні</th></tr></thead>
+                  <tbody>
+                    <tr><td>Чоловічий (Істота)</td><td>přítel / student</td><td>přítel<u>a</u> / student<u>a</u></td><td>Znávám tohoto studenta.</td></tr>
+                    <tr><td>Чоловічий (Неістота)</td><td>stůl / dům / hrad</td><td>stůl / dům / hrad (без змін)</td><td>Kupuji nový stůl.</td></tr>
+                    <tr><td>Жіночий рід</td><td>kniha / káva / matka</td><td>knih<u>u</u> / káv<u>u</u> / matk<u>u</u></td><td>Piji dobrou kávu.</td></tr>
+                    <tr><td>Середній рід</td><td>město / auto / jablko</td><td>město / auto / jablko (без змін)</td><td>Mám nové auto.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            `
+          },
+          'e': {
+            title: '2e. Test Lekce 2',
+            content: `
+              <div class="topic-header">
+                <h2>2e. Opakování Lekce 2 — Перевірка знань міської лексики та Akusativu</h2>
+              </div>
+              <div class="bubble-card">
+                <h3>📌 Чек-лист Юніту 2:</h3>
+                <ul>
+                  <li>✅ Вмію запитати дорогу до потрібного об'єкта у місті.</li>
+                  <li>✅ Вільно орієнтуюсь у часі, днях тижня та годинах.</li>
+                  <li>✅ Можу зробити замовлення в ресторані та попросити рахунок.</li>
+                  <li>✅ Розумію базові правила знахідного відмінку (Akusativ).</li>
+                </ul>
+              </div>
+              <button class="finish-btn" onclick="openQuiz()">UKONČIT 2. LEKCI (ЗАВЕРШИТИ ЮНІТ)</button>
+            `
+          }
+        }
+      },
+      'unit3': {
+        title: 'Lekce 3 (A1-A2)',
+        topics: {
+          'a': {
+            title: '3a. Moje rodina',
+            content: `
+              <div class="topic-header">
+                <h2>3a. Rodina a vztahy — Родина, родинні зв'язки та характери</h2>
+                <p>Розповідаємо про членів своєї родини, їх вік, професії та життєві інтереси.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>👨‍👩‍👧‍👦 Členové rodiny (Члени родини)</h3>
+                <div class="vocab-grid">
+                  <div class="vocab-item"><div class="vocab-cz">Otec (tatínek) / Matka (maminka)</div><div class="vocab-uk">Батько / Мати</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Bratr / Sestra</div><div class="vocab-uk">Брат / Сестра</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Syn / Dcera</div><div class="vocab-uk">Син / Донька</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Dědeček / Babička</div><div class="vocab-uk">Дідусь / Бабуся</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Strýc / Teta</div><div class="vocab-uk">Дядько / Тітка</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Manžel / Manželka</div><div class="vocab-uk">Чоловік / Дружина</div></div>
+                </div>
+              </div>
+            `
+          },
+          'b': {
+            title: '3b. Přivlastňovací zájmena',
+            content: `
+              <div class="topic-header">
+                <h2>3b. Gramatika: Přivlastňovací zájmena — Присвійні займенники</h2>
+                <p>Мій, твій, його, її, наш, ваш, їхній — повна таблиця узгодження з родами іменників.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>📘 Таблиця присвійних займенників</h3>
+                <table class="grammar-table">
+                  <thead><tr><th>Особа</th><th>Чоловічий рід (M)</th><th>Жіночий рід (Ž)</th><th>Середній рід (S)</th></tr></thead>
+                  <tbody>
+                    <tr><td>Můj (Мій)</td><td>můj bratr</td><td>moje / má sestra</td><td>moje / mé auto</td></tr>
+                    <tr><td>Tvůj (Твій)</td><td>tvůj otec</td><td>tvoje / tvá matka</td><td>tvoje / tvé město</td></tr>
+                    <tr><td>Jeho (Його)</td><td colspan="3" style="text-align:center;">jeho (незмінне: otec, sestra, auto)</td></tr>
+                    <tr><td>Její (Її)</td><td colspan="3" style="text-align:center;">její (незмінне: otec, sestra, auto)</td></tr>
+                    <tr><td>Náš (Наш)</td><td>náš pes</td><td>naše kočka</td><td>naše dítě</td></tr>
+                    <tr><td>Váš (Ваш)</td><td>váš domov</td><td>vaše práce</td><td>vaše auto</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            `
+          },
+          'c': {
+            title: '3c. Vzhled & Povaha',
+            content: `
+              <div class="topic-header">
+                <h2>3c. Jak vypadá a jaký je? — Зовнішність та риси характеру</h2>
+                <p>Лексика для детального опису людини: зріст, волосся, очі, темперамент.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>👀 Popis osoby (Опис людини)</h3>
+                <div class="vocab-grid">
+                  <div class="vocab-item"><div class="vocab-cz">Vysoký / Malý (Nízký)</div><div class="vocab-uk">Високий / Низький</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Mladý / Starý</div><div class="vocab-uk">Молодий / Старий</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Blond / Tmavovlasý</div><div class="vocab-uk">Блонд / Темноволосий</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Milý / Sympatický</div><div class="vocab-uk">Милий / Симпатичний</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Chytrý / Pracovitý</div><div class="vocab-uk">Розумний / Працьовитий</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Veselý / Klidný</div><div class="vocab-uk">Веселий / Спокійний</div></div>
+                </div>
+              </div>
+            `
+          },
+          'd': {
+            title: '3d. Volný čas & Koníčky',
+            content: `
+              <div class="topic-header">
+                <h2>3d. Koníčky a volný čas — Хобі, спорт та вільний час</h2>
+                <p>Як говорити про те, чим ви захоплюєтеся у вихідні або вечорами.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>⚽ Zájmy a aktivity</h3>
+                <ul>
+                  <li><strong>Sportovat</strong> — займатися спортом (běhat, plavat, hrát fotbal/tenis).</li>
+                  <li><strong>Kulturní aktivity</strong> — číst knihy, poslouchat hudbu, chodit do kina nebo divadla.</li>
+                  <li><strong>Cestování</strong> — objevovat nová místa, fotografovat, vařit nová jídla.</li>
+                </ul>
+              </div>
+            `
+          },
+          'e': {
+            title: '3e. Test Lekce 3',
+            content: `
+              <div class="topic-header">
+                <h2>3e. Opakování Lekce 3 — Перевірка родинної лексики і займенників</h2>
+              </div>
+              <div class="bubble-card">
+                <h3>📌 Чек-лист Юніту 3:</h3>
+                <ul>
+                  <li>✅ Вільно називаю членів родини та описую їхні стосунки.</li>
+                  <li>✅ Без помилок використовую присвійні займенники (můj, tvůj, náš...).</li>
+                  <li>✅ Можу описати зовнішній вигляд та характер будь-якої людини.</li>
+                </ul>
+              </div>
+              <button class="finish-btn" onclick="openQuiz()">UKONČIT 3. LEKCI (ЗАВЕРШИТИ ЮНІТ)</button>
+            `
+          }
+        }
+      },
+      'unit4': {
+        title: 'Lekce 4 (A2)',
+        topics: {
+          'a': {
+            title: '4a. Bydlení & Nábytek',
+            content: `
+              <div class="topic-header">
+                <h2>4a. Bydlení, dům a pokoje — Житло, типи будинків та кімнати</h2>
+                <p>Лексика пов'язана з власною квартирою, орендою та меблюванням кімнат.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>🏠 Typy bydlení a místnosti</h3>
+                <div class="vocab-grid">
+                  <div class="vocab-item"><div class="vocab-cz">Rodinný dům / Byt</div><div class="vocab-uk">Будинок / Квартира</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Obývák / Ložnice</div><div class="vocab-uk">Вітальня / Спальня</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Kuchyně / Koupelna</div><div class="vocab-uk">Кухня / Ванна кімната</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Skříň / Postel / Stůl</div><div class="vocab-uk">Шафа / Ліжко / Стіл</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Lednička / Pračka</div><div class="vocab-uk">Холодильник / Пральна машина</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Balkon / Sklep</div><div class="vocab-uk">Балкон / Підвал</div></div>
+                </div>
+              </div>
+            `
+          },
+          'b': {
+            title: '4b. Lokativ (6. pád)',
+            content: `
+              <div class="topic-header">
+                <h2>4b. Gramatika: 6. pád (Lokativ) — Місцевий відмінок</h2>
+                <p>Відмінок, який використовується виключно з прийменниками (v, na, o, po, při) для позначення місця та теми розмови.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>📘 Закінчення в Lokativu (Де? Про кого? Про що?)</h3>
+                <table class="grammar-table">
+                  <thead><tr><th>Рід іменника</th><th>Прийменники</th><th>Зміна закінчення</th><th>Приклад</th></tr></thead>
+                  <tbody>
+                    <tr><td>Чоловічий (Mstitel/Hrad)</td><td>v / na / o</td><td>-e / -i / -u (hrad -> v hrad<u>ě</u>)</td><td>Bydlím v Praze. (Praha -> v Praze)</td></tr>
+                    <tr><td>Жіночий рід</td><td>v / na / o</td><td>-e / -i (žena -> o žen<u>ě</u>)</td><td>Mluvíme o práci.</td></tr>
+                    <tr><td>Середній рід</td><td>v / na / o</td><td>-u / -ě (město -> v měst<u>ě</u>)</td><td>Knihovna je v centru.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            `
+          },
+          'c': {
+            title: '4c. Hledám pronájem',
+            content: `
+              <div class="topic-header">
+                <h2>4c. Hledání bytu a pronájem — Оренда житла та комунальні послуги</h2>
+                <p>Як спілкуватися з ріелтором, читати оголошення про оренду та обговорювати ціну.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>🔑 Odborné termíny pro pronájem</h3>
+                <div class="vocab-grid">
+                  <div class="vocab-item"><div class="vocab-cz">Pronájem / Nájemné</div><div class="vocab-uk">Оренда / Плата за оренду</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Poplatky / Kauce</div><div class="vocab-uk">Комунальні / Застава</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Majitel / Realitní makléř</div><div class="vocab-uk">Власник / Ріелтор</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Plně vybavený byt</div><div class="vocab-uk">Повністю мебльована квартира</div></div>
+                </div>
+              </div>
+            `
+          },
+          'd': {
+            title: '4d. Domácí práce',
+            content: `
+              <div class="topic-header">
+                <h2>4d. Domácící práce a úklid — Домашні обов'язки</h2>
+                <p>Щоденні побутові справи: прибирання, готування, прання та догляд за житлом.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>🧹 Domácí povinnosti</h3>
+                <ul>
+                  <li><strong>Uklízet byt</strong> — прибирати квартиру.</li>
+                  <li><strong>Vařit oběd</strong> — готувати обід.</li>
+                  <li><strong>Prát a žehlit prádlo</strong> — прати та прасувати білизну.</li>
+                  <li><strong>Zalévat květiny</strong> — поливати квіти.</li>
+                </ul>
+              </div>
+            `
+          },
+          'e': {
+            title: '4e. Test Lekce 4',
+            content: `
+              <div class="topic-header">
+                <h2>4e. Opakování Lekce 4 — Житлові умови та місцевий відмінок</h2>
+              </div>
+              <div class="bubble-card">
+                <h3>📌 Чек-лист Юніту 4:</h3>
+                <ul>
+                  <li>✅ Знаю назви меблів, побутової техніки та приміщень у будинку.</li>
+                  <li>✅ Впевнено володію місцевим відмінком (Lokativ) для опису локацій.</li>
+                  <li>✅ Розумію базові терміни орендного ринку нерухомості в Чехії.</li>
+                </ul>
+              </div>
+              <button class="finish-btn" onclick="openQuiz()">UKONČIT 4. LEKCI (ЗАВЕРШИТИ ЮНІТ)</button>
+            `
+          }
+        }
+      },
+      'unit5': {
+        title: 'Lekce 5 (A2)',
+        topics: {
+          'a': {
+            title: '5a. Doprava & Cestování',
+            content: `
+              <div class="topic-header">
+                <h2>5a. Cestování a dopravní prostředky — Подорожі та транспорт</h2>
+                <p>Громадський транспорт міста (MHD), поїзди, автобуси, літаки та придбання квитків.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>🚆 Druhy dopravy a nádraží</h3>
+                <div class="vocab-grid">
+                  <div class="vocab-item"><div class="vocab-cz">Tramvaj / Autobus / Metro</div><div class="vocab-uk">Трамвай / Автобус / Метро</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Vlak / Rychlík</div><div class="vocab-uk">Поїзд / Швидкісний поїзд</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Jízdenka / Jízdní řád</div><div class="vocab-uk">Квиток / Розклад руху</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Nástupiště / Kolej</div><div class="vocab-uk">Перон / Колія</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Zpoždění / Pokladna</div><div class="vocab-uk">Запізнення / Каса</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Zpáteční jízdenka</div><div class="vocab-uk">Квиток туди і назад</div></div>
+                </div>
+              </div>
+            `
+          },
+          'b': {
+            title: '5b. Na letišti',
+            content: `
+              <div class="topic-header">
+                <h2>5b. Letiště a odbavení — Аеропорт та процедура посадки</h2>
+                <p>Реєстрація на рейс, паспортний контроль, багаж та вихід на посадку (Gate).</p>
+              </div>
+              <div class="bubble-card">
+                <h3>✈️ Letištní slovní zásoba</h3>
+                <div class="vocab-grid">
+                  <div class="vocab-item"><div class="vocab-cz">Cestovní pas / Vízum</div><div class="vocab-uk">Паспорт / Віза</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Palubní lístek (Boarding pass)</div><div class="vocab-uk">Посадковий талон</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Zavazadlo (kufry)</div><div class="vocab-uk">Багаж (валізи)</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Bezpečnostní kontrola</div><div class="vocab-uk">Контроль безпеки</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Odlety / Přílety</div><div class="vocab-uk">Вильоти / Прильоти</div></div>
+                </div>
+              </div>
+            `
+          },
+          'c': {
+            title: '5c. Hotel & Ubytování',
+            content: `
+              <div class="topic-header">
+                <h2>5c. V hotelu a rezervace — Готелі та бронювання номерів</h2>
+                <p>Все необхідне для комунікації на ресепшені готелю, хостелу або пансіонату.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>🏨 Hotelový servis</h3>
+                <ul>
+                  <li><strong>Mám rezervaci na jméno...</strong> — У мене є бронювання на ім'я...</li>
+                  <li><strong>Jednolůžkový / Dvojlůžkový pokoj</strong> — Односпальний / Двоспальний номер.</li>
+                  <li><strong>Je snídaně v ceně pobytu?</strong> — Сніданок включено у вартість проживання?</li>
+                  <li><strong>Kdy je check-out (odhlášen)?</strong> — О котрій годині виїзд з готелю?</li>
+                </ul>
+              </div>
+            `
+          },
+          'd': {
+            title: '5d. Instrumental (7. pád)',
+            content: `
+              <div class="topic-header">
+                <h2>5d. Gramatika: 7. pád (Instrumental) — Орудний відмінок</h2>
+                <p>Відповідає на питання *kým? čím?* (з ким? чим?), а також використовується для позначення транспорту.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>📘 Як утворюється Instrumental (Ким? Чим?)</h3>
+                <table class="grammar-table">
+                  <thead><tr><th>Рід іменника</th><th>Закінчення (Однина)</th><th>Приклад у реченні</th></tr></thead>
+                  <tbody>
+                    <tr><td>Чоловічий (M/N)</td><td>-em / -ým (pán -> s pánem, auto -> autem)</td><td>Jedu do práce autobusem.</td></tr>
+                    <tr><td>Жіночий рід</td><td>-ou (žena -> se ženou, Praha -> s Prahou)</td><td>Cestuji s přítelkyní.</td></tr>
+                    <tr><td>Середній рід</td><td>-em / -ým (město -> městem)</td><td>Město žije nočním životem.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            `
+          },
+          'e': {
+            title: '5e. Test Lekce 5',
+            content: `
+              <div class="topic-header">
+                <h2>5e. Opakování Lekce 5 — Транспорт, готелі та орудний відмінок</h2>
+              </div>
+              <div class="bubble-card">
+                <h3>📌 Чек-лист Юніту 5:</h3>
+                <ul>
+                  <li>✅ Вільно орієнтуюсь на вокзалах, в аеропортах та громадському транспорті.</li>
+                  <li>✅ Вмію бронювати номер у готелі та спілкуватися з адміністратором.</li>
+                  <li>✅ Розумію та застосовую орудний відмінок (Instrumental) для транспорту.</li>
+                </ul>
+              </div>
+              <button class="finish-btn" onclick="openQuiz()">UKONČIT 5. LEKCI (ЗАВЕРШИТИ ЮНІТ)</button>
+            `
+          }
+        }
+      },
+      'unit6': {
+        title: 'Lekce 6 (A2)',
+        topics: {
+          'a': {
+            title: '6a. Lidské tělo',
+            content: `
+              <div class="topic-header">
+                <h2>6a. Lidské tělo a zdraví — Частини людського тіла</h2>
+                <p>Анатомічна лексика чеською мовою для візиту до лікаря або аптеки.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>👤 Anatomie a části těla</h3>
+                <div class="vocab-grid">
+                  <div class="vocab-item"><div class="vocab-cz">Hlava / Vlasy / Obličej</div><div class="vocab-uk">Голова / Волосся / Обличчя</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Oko / Ucho / Nos / Ústa</div><div class="vocab-uk">Око / Вухо / Ніс / Рот</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Ruka (prsty) / Noha (koleno)</div><div class="vocab-uk">Рука (пальці) / Нога (коліно)</div></div>
+                  <div class="vocab-item"><div class="vocab-cz">Břicho / Záda / Srdce</div><div class="vocab-uk">Живіт / Спина / Серце</div></div>
+                </div>
+              </div>
+            `
+          },
+          'b': {
+            title: '6b. U lékaře',
+            content: `
+              <div class="topic-header">
+                <h2>6b. U lékaře a symptomy — Опис симптомів та візит до лікаря</h2>
+                <p>Як описати своє самопочуття, назвати хвороби та отримати лікарняний лист або рецепт.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>🤒 Nemoci a gramatika BOLET</h3>
+                <p>Основна конструкція вираження болю використовує знахідний відмінок (кого? що? болить):</p>
+                <ul>
+                  <li><strong>Bolí mě hlava / břicho / zuby / v krku.</strong> — У мене болить голова / живіт / зуби / в горлі.</li>
+                  <li><strong>Mám horečku, rýmu a kašel.</strong> — У мене температура, нежить та кашель.</li>
+                  <li><strong>Potřebuji neschopenku a recept na léky.</strong> — Мені потрібен лікарняний та рецепт на ліки.</li>
+                </ul>
+              </div>
+            `
+          },
+          'c': {
+            title: '6c. V lékárně',
+            content: `
+              <div class="topic-header">
+                <h2>6c. V lékárně — В аптеці</h2>
+                <p>Покупка знеболювальних, вітамінів, пластирів та медичних препаратів без рецепта.</p>
+              </div>
+              <div class="vocab-grid">
+                <div class="vocab-item"><div class="vocab-cz">Lékárna / Lékárník</div><div class="vocab-uk">Аптека / Фармацевт</div></div>
+                <div class="vocab-item"><div class="vocab-cz">Prášek proti bolesti hlavy</div><div class="vocab-uk">Таблетка від головного болю</div></div>
+                <div class="vocab-item"><div class="vocab-cz">Náplast / Obvaz / Dezinfekce</div><div class="vocab-uk">Пластир / Бинт / Дезінфекція</div></div>
+                <div class="vocab-item"><div class="vocab-cz">Kapky do nosu / kašle</div><div class="vocab-uk">Краплі в ніс / від кашлю</div></div>
+              </div>
+            `
+          },
+          'd': {
+            title: '6d. Zdravý životní styl',
+            content: `
+              <div class="topic-header">
+                <h2>6d. Zdravý životní styl a sport — Здоровий спосіб життя</h2>
+                <p>Режим дня, здорове харчування, сон, фізична активність та боротьба зі стресом.</p>
+              </div>
+              <div class="bubble-card">
+                <h3>🥗 Zásady zdraví</h3>
+                <ul>
+                  <li><strong>Pít dostatek čisté vody</strong> — пити достатньо чистої води.</li>
+                  <li><strong>Jíst hodně ovoce a zeleniny</strong> — їсти багато фруктів та овочів.</li>
+                  <li><strong>Spát minimálně 7–8 hodin denně</strong> — спати щонайменше 7–8 годин на день.</li>
+                  <li><strong>Pravidelně sportovat a relaxovat</strong> — регулярно займатися спортом та відпочивати.</li>
+                </ul>
+              </div>
+            `
+          },
+          'e': {
+            title: '6e. Test Lekce 6',
+            content: `
+              <div class="topic-header">
+                <h2>6e. Závěrečný test Lekce 6 — Підсумкове закріплення рівня A1–A2</h2>
+              </div>
+              <div class="bubble-card">
+                <h3>📌 Фінальний чек-лист курсу (Юніт 6):</h3>
+                <ul>
+                  <li>✅ Вільно називаю частини людського тіла та органи.</li>
+                  <li>✅ Вмію скаржитися на біль за допомогою конструкції *bolí mě...*</li>
+                  <li>✅ Легко орієнтуюсь в аптечній лексиці та спілкуванні з лікарем.</li>
+                  <li>✅ Розумію базові засади здорового способу життя чеською мовою.</li>
+                </ul>
+              </div>
+              <button class="finish-btn" onclick="openQuiz()">UKONČIT KURZ (ЗАВЕРШИТИ КУРС A1-A2)</button>
+            `
+          }
+        }
+      }
+    };
+
+    // ================= SCRIPT LOGIC =================
+    let currentUnit = 'unit1';
+
+    const unitColors = {
+      'unit1': { light: '#ff7675', dark: '#d63031', bg: 'rgba(255, 118, 117, 0.2)' },
+      'unit2': { light: '#74b9ff', dark: '#0984e3', bg: 'rgba(116, 185, 255, 0.2)' },
+      'unit3': { light: '#55efc4', dark: '#00b894', bg: 'rgba(85, 239, 196, 0.2)' },
+      'unit4': { light: '#a29bfe', dark: '#6c5ce7', bg: 'rgba(162, 155, 254, 0.2)' },
+      'unit5': { light: '#fdcb6e', dark: '#e17055', bg: 'rgba(253, 203, 110, 0.2)' },
+      'unit6': { light: '#fd79a8', dark: '#e84393', bg: 'rgba(253, 121, 168, 0.2)' }
+    };
+
+    function initApp() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.innerHTML = '<div class="sidebar-title">Структура курсу</div>';
+      
+      for (let i = 1; i <= 6; i++) {
+        let btn = document.createElement('button');
+        btn.className = 'unit-btn';
+        btn.setAttribute('data-unit', 'unit' + i);
+        btn.innerText = unitsData['unit' + i].title;
+        btn.onclick = () => loadUnit('unit' + i);
+        sidebar.appendChild(btn);
+      }
+      loadUnit('unit1');
+    }
+
+    function loadUnit(unitId) {
+      if(!unitsData[unitId]) return;
+      currentUnit = unitId;
+
+      if (unitColors[unitId]) {
+        document.documentElement.style.setProperty('--unit-light', unitColors[unitId].light);
+        document.documentElement.style.setProperty('--unit-dark', unitColors[unitId].dark);
+        document.documentElement.style.setProperty('--unit-bg', unitColors[unitId].bg);
+      }
+
+      document.querySelectorAll('.unit-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.querySelector('.unit-btn[data-unit="' + unitId + '"]');
+      if(activeBtn) activeBtn.classList.add('active');
+
+      const topicNav = document.getElementById('topic-nav');
+      topicNav.innerHTML = '';
+      
+      const topics = unitsData[unitId].topics;
+      for (const topicKey in topics) {
+        let btn = document.createElement('button');
+        btn.className = 'topic-btn';
+        btn.innerText = topics[topicKey].title.split(' ')[0];
+        btn.onclick = () => loadTopic(unitId, topicKey, btn);
+        topicNav.appendChild(btn);
+      }
+
+      if (topicNav.firstChild) {
+        topicNav.firstChild.click();
+      }
+    }
+
+    function loadTopic(unitId, topicId, btnElement) {
+      document.querySelectorAll('.topic-btn').forEach(btn => btn.classList.remove('active'));
+      if(btnElement) btnElement.classList.add('active');
+
+      const contentArea = document.getElementById('content-area');
+      if(unitsData[unitId] && unitsData[unitId].topics[topicId]) {
+        contentArea.innerHTML = unitsData[unitId].topics[topicId].content;
+      }
+    }
+
+    function openQuiz() {
+      document.getElementById('quiz-modal').style.display = 'flex';
+    }
+
+    function closeQuiz() {
+      document.getElementById('quiz-modal').style.display = 'none';
+    }
+
+    window.onload = initApp;
+  </script>
+
+</body>
+</html>
